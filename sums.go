@@ -31,23 +31,18 @@ func ParallelSumGeneric(movs Summable) float64 {
 }
 
 func Sum(movs []M) float64 {
-	if len(movs) == 0 {
-		return 0
-	}
-
-	if len(movs) == 1 {
-		return movs[0].Venda
-	}
-
+	n := len(movs)
 	var total float64
-	for idx, v := range movs {
-		if v.Tipo == 1 {
-			total -= movs[idx].Venda
-		} else {
-			total += movs[idx].Venda
+	switch n {
+	case 0:
+		return total
+	case 1:
+		return movs[0].Venda
+	default:
+		for i := 0; i < n; i++ {
+			total += movs[i].V()
 		}
 	}
-
 	return total
 }
 
@@ -74,4 +69,8 @@ func ParallelSum(movs []M) float64 {
 		total += <-result
 	}
 	return total
+}
+
+func ParallelSumGeneric2(movs Summable) float64 {
+	return movs.Sum()
 }
