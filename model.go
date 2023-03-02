@@ -6,6 +6,16 @@ type M struct {
 	Lucro float64
 }
 
+func (m *M) V() float64 {
+
+	switch m.Tipo {
+	case 1:
+		return -m.Venda
+	default:
+		return m.Venda
+	}
+}
+
 type ListaM []M
 
 type MVenda struct {
@@ -13,20 +23,17 @@ type MVenda struct {
 }
 
 func (m MVenda) Sum() float64 {
-	if len(m.ListaM) == 0 {
-		return 0
-	}
 
-	if len(m.ListaM) == 1 {
-		return m.ListaM[0].Venda
-	}
-
+	n := len(m.ListaM)
 	var total float64
-	for _, v := range m.ListaM {
-		if v.Tipo == 1 {
-			total -= v.Venda
-		} else {
-			total += v.Venda
+	switch n {
+	case 0:
+		return total
+	case 1:
+		return m.ListaM[0].Venda
+	default:
+		for i := 0; i < n; i++ {
+			total += m.ListaM[i].V()
 		}
 	}
 
